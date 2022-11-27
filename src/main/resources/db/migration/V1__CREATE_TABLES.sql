@@ -1,0 +1,11 @@
+CREATE TABLE girls
+(
+    id INT PRIMARY KEY,
+    name VARCHAR NOT NULL
+);
+
+CREATE TABLE boys
+(
+    id INT PRIMARY KEY,
+    name VARCHAR NOT NULL
+);

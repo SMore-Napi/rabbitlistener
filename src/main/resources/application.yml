@@ -1,0 +1,13 @@
+spring:
+  datasource:
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+  flyway:
+    enabled: true
+server:
+  port: 8081
+rabbit:
+  queueName: ${QUEUE_NAME}
+  host: ${HOST_NAME}

@@ -1,0 +1,55 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: listener
+  labels:
+    name: listener
+spec:
+  ports:
+    - nodePort: 30163
+      port: 8081
+      targetPort: 8081
+      protocol: TCP
+  selector:
+    app: listener
+  type: NodePort
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: listener
+spec:
+  selector:
+    matchLabels:
+      app: listener
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: listener
+    spec:
+      containers:
+        - name: listener
+          image: smorenapi/listener:latest
+          ports:
+            - containerPort: 8081
+          env:   # Setting Enviornmental Variables
+            - name: PORT
+              value: "8081"
+            - name: DB_URL   # Setting Database URL
+              value: "jdbc:postgresql://postgres:5432/postgres"
+            - name: DB_USERNAME  # Setting Database username from Secret
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-credentials # Secret Name
+                  key: postgres_user
+            - name: DB_PASSWORD # Setting Database password from Secret
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-credentials
+                  key: postgres_password
+            - name: QUEUE_NAME   # Setting queue name
+              value: "myQueue"
+            - name: HOST_NAME   # Setting host name for Rabbit MQ
+              value: "rabbitmq"
